@@ -3,7 +3,8 @@ package com.sumu.demo;
 public class InsertSort {
 	/**
 	 * 直接插入排序
-	 * 
+	 * 核心思想:从第二个数开始，不断与前面的数进行对比（从后往前），
+	 * 遇到大的就将大的往后移一位，直到遇到小的，那么小的后面一个位置就是该值的位置
 	 */
 	public static void directInsertSort() {
 		int[] array = new int[] { 2, 12, 42, 32, 1, 3, 5, 64, 34, 67, -1 };
@@ -30,6 +31,11 @@ public class InsertSort {
 
 	/**
 	 * 二分法插入排序
+	 * 核心思想:思想跟直接插入排序基本一致，只是寻找插入的位置的方式不同，
+	 * 直接插入排序是跟前面已排序数组从大到小一个一个的进行对比，直到找到比value小的
+	 * 而二分法插入排序，是折中查找位置，先跟已排序数组最中间的值进行对比，如果比value大，
+	 * 则说明位置在中间值的左边，否则在中间值的右边，以此循环，直到找到正确index，然后将index后面的值都向后移一位，
+	 * 让出位置，然后插入
 	 */
 	public static void binaryInsertSort() {
 		int[] array = new int[] { 2, 12, 42, 32, 1, 3, 5, 64, 34, 67, -1 };
@@ -66,6 +72,8 @@ public class InsertSort {
 
 	/**
 	 * 希尔排序(不稳定排序) 相对于直接插入排序，元素之间的交换次数减少
+	 * 核心思想：选择一个增量(一般选取数组长度的一半)，然后根据增量，将数组分成好几组，再将每组分别进行直接插入排序，
+	 * 然后增量递减重复分组，排序，直到增量为0结束
 	 */
 	public static void shellSort() {
 		int[] array = new int[] { 2, 12, 42, 32, 1, 3, 5, 64, 34, 67, -1 };
@@ -101,86 +109,11 @@ public class InsertSort {
 		}
 		System.out.println("");
 	}
-	/**
-	 * 堆排序
-	 */
-	public static void heapSort() {
-		int[] array = new int[] { 2, 12, 42, 32, 1, 3, 5, 64, 34, 67, -1 };
-		buildMaxHeap(array);
-		for (int i = array.length-1; i >=1; i--) {
-			exchange(array, i, 0);
-			maxHeap(array, i, 0);
-		}
-		
-		System.out.print("\nheapSort:");
-		for (int i : array) {
-			System.out.print(i + " ");
-		}
-		System.out.println("");
-	}
-	/**
-	 * 构建最大堆
-	 * @param array
-	 */
-	private static void buildMaxHeap(int[] array) {
-		if (array==null || array.length<=1) {
-			return;
-		}
-		int half=(array.length-1)/2;
-		//比较只需要从树中间开始，因为只要知道父结点的位置就可以得到左右子结点的位置
-		//也就是说树的最底层不需要遍历，只需要从倒数第二层开始即可。
-		for (int i = half; i>=0; i--) {
-			maxHeap(array,array.length,i);
-		}
-	}
 	
-	/**
-	 * 将父结点跟左右子结点的大小进行比较，将最大的跟父结点交换位置
-	 * @param array  原数组
-	 * @param length 需要建立大堆的数组长度
-	 * @param index  从哪个位置开始
-	 */
-	private static void maxHeap(int[] array, int length, int index) {
-		// TODO Auto-generated method stub
-		//index为完全二叉树中的一个根节点，则左子结点下标为2*index+1,右子结点下标2*index+2,
-		//因为数组下标是从0开始,所以完全二叉树的最顶根节点为0
-		int left=2*index+1;
-		int right=2*index+2;
-		int	max=index;
-		if (left<length&&array[left]>array[max]) {
-			//如果left超出了数组的长度，则表示没有该子结点，
-			max=left;
-		}
-		
-		if (right<length&&array[right]>array[max]) {
-			max=right;
-		}
-		if (max!=index) {
-			//如果子结点比父结点大，则交换两个在数组中的位置
-			exchange(array, index, max);
-			//如果最大的位置跟起始位置不同，说明起始位置(父结点)不是最大的，需要交换，
-			//那么就有可能会影响下子结点下面的树，所以需要继续寻找子结点树当中最大的。
-			maxHeap(array, length, max);
-		}
-		
-	}
-	
-	/**
-	 * 交换两个在数组中的位置
-	 * @param array      
-	 * @param index1
-	 * @param index2
-	 */
-	public static void exchange(int[] array,int index1,int index2) {
-		int temp=array[index1];
-		array[index1]=array[index2];
-		array[index2]=temp;
-	}
 
 	public static void main(String[] args) {
 		InsertSort.directInsertSort();
 		InsertSort.binaryInsertSort();
-		//InsertSort.shellSort();
-		InsertSort.heapSort();
+		InsertSort.shellSort();
 	}
 }
